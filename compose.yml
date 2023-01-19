@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=devopsRoot
+      - MYSQL_DATABASE=devops
+      - MYSQL_USER=devops
+      - MYSQL_PASSWORD=devops
+    image: mariadb
+    restart: always
+
+  my_app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: devopstp
+    depends_on:
+      - mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=devopsRoot
+      - MYSQL_DATABASE=devops
+      - MYSQL_USER=devops
+      - MYSQL_PASSWORD=devops
+    ports:
+      - "3380:8080"
+    restart: always
+    env_file:
+      - 'variables.env'
+    volumes:
+      - '.:/code'
